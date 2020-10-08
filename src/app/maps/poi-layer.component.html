@@ -1,0 +1,15 @@
+<button  *ngFor="let poi of pois"
+		[style]="getViewportPositionAsCSS(poi.position)"
+		[title]="poi.title" [class]="poi.icon"
+		(click)="open($event, poi, trigger)" type="button" cdkOverlayOrigin
+		#trigger="cdkOverlayOrigin">
+</button>
+
+<ng-template cdkConnectedOverlay cdkConnectedOverlayPanelClass="poi-details"
+		[cdkConnectedOverlayOrigin]="selectedTrigger" [cdkConnectedOverlayOpen]="!!selected"
+		(overlayOutsideClick)="selected = null">
+	<h1><a [href]="selected.url" target="_blank" title="View page in a new tab">{{selected.title}}</a></h1>
+	<sup>(from {{selected.source.name}})</sup>
+	<p *ngIf="selected.description" [innerHtml]="selected.description"></p>
+	<p><img *ngIf="selected.thumbnailUrl" [src]="selected.thumbnailUrl" alt=""/></p>
+</ng-template>

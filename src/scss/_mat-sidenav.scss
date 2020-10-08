@@ -1,0 +1,19 @@
+@import "fontawesome";
+
+mat-sidenav {
+	background-color: rgba($color: white, $alpha: .7);
+	max-width: 100%;
+	min-width: 70em;
+	padding: 2em .5em .5em .5em;
+	width: 40%;
+}
+
+.toggle-settings {
+	height: 2em;
+	width: 2em;
+	z-index: 9000;
+
+	&:before {
+		@include fa-icon($fa-var-bars);
+	}
+}

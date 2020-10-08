@@ -1,0 +1,7 @@
+@import "fontawesome";
+
+.wikipedia {
+	&:before {
+		@include fa-icon($fa-var-wikipedia-w);
+	}
+}

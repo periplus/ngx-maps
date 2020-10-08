@@ -1,0 +1,15 @@
+.cdk-drag {
+	border: solid 1px;
+	border-radius: .5em;
+	list-style-type: none;
+	margin: 2px 0;
+	padding: 0 .5em;
+}
+
+.cdk-drag-placeholder {
+	// background-color: mat-color($mat-primary, 200);
+}
+
+.cdk-drag-handle {
+	cursor: move;
+}

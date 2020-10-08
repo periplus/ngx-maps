@@ -1,0 +1,16 @@
+<div *ngIf="previousZoom" [style.transform]="translateCenterAsCSS + ' ' + temporaryScaleAsCSS">
+	<div *ngFor="let y of previousTiles?.yTiles; let j = index">
+		<ng-container *ngFor="let x of previousTiles?.xTiles; let i = index">
+			<img [src]="{x: x, y: y} | tileUrl: previousZoom" alt=""
+					[style.height]="source.tileSize + 'px'" [style.width]="source.tileSize + 'px'"/>
+		</ng-container>
+	</div>
+</div>
+<div [style.transform]="translateCenterAsCSS">
+	<div *ngFor="let y of yTiles; let j = index">
+		<ng-container *ngFor="let x of xTiles; let i = index">
+			<img [src]="{x: x, y: y} | tileUrl" alt=""
+					[style.height]="source.tileSize + 'px'" [style.width]="source.tileSize + 'px'"/>
+		</ng-container>
+	</div>
+</div>

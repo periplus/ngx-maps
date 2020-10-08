@@ -1,0 +1,8 @@
+.mat-expansion-panel-header {
+	font-size: 1em;
+	height: 3em;
+
+	&.mat-expanded {
+		height: 4em;
+	}
+}

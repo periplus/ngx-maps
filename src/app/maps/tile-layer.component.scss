@@ -1,0 +1,27 @@
+:host {
+	//transition: transform .5s linear;
+	user-select: none;
+
+	> div {
+		display: flex;
+		flex-flow: column;
+		height: 100%;
+		left: 0;
+		margin: auto;
+		padding: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
+
+		> div {
+			display: inline-flex;
+			margin: 0;
+			padding: 0;
+
+			> img {
+				background: transparent;
+				display: inline-block;
+			}
+		}
+	}
+}

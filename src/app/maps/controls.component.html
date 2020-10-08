@@ -1,0 +1,27 @@
+<div class="me" [style]="myPositionAsCSS"></div>
+<nav>
+	<button (click)="navExpanded = !navExpanded"
+			[class.expand]="!navExpanded" [class.collapse]="navExpanded"></button>
+	<ng-container *ngIf="navExpanded">
+		<button class="follow-me" [title]="trackError || 'Follow me'" (click)="autoCenter = true"
+				[class.active]="autoCenter"
+				[class.error]="!!trackError"></button>
+		<mat-slider
+				[min]="ZoomLevel.MIN" [max]="ZoomLevel.MAX"
+				[(ngModel)]="zoom"
+				invert vertical step="1" tickInterval="1"
+				[title]="'Zoom:' + zoom">
+		</mat-slider>
+	</ng-container>
+</nav>
+<div class="coordinates">
+	<span>{{mouseCoordinates.latitude | number:  '1.2-4'}}, {{mouseCoordinates.longitude | number: '1.2-4'}}</span>
+</div>
+<context-menu>
+	<ng-template contextMenuItem let-item [passive]="true">
+		<span>{{item.latitude | number:  '1.2-4'}}, {{item.longitude | number: '1.2-4'}}</span>
+	</ng-template>
+	<ng-template contextMenuItem let-item (execute)="copyToClipboard($event.item)">
+		Copy coordinates
+	</ng-template>
+</context-menu>

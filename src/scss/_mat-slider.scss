@@ -1,0 +1,22 @@
+mat-slider.mat-slider-vertical {
+	.mat-slider-thumb {
+		background-color: rgba(0,0,0,.76);
+	}
+
+	.mat-slider-wrapper {
+		left: 50%;
+	}
+
+	.mat-slider-track-background, .mat-slider-track-fill {
+		background-color: rgba(0,0,0,.76);
+		width: .25em;
+	}
+}
+
+mat-slider.mat-slider-horizontal {
+	height: 2em;
+
+	.mat-slider-wrapper {
+		top: 1em;
+	}
+}

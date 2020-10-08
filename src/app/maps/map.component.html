@@ -1,0 +1,23 @@
+<mat-sidenav-container>
+	<mat-sidenav #sidenav>
+		<h1>Settings</h1>
+		<map-config [config]="config" [tileSources]="tileSources" [poiSources]="poiSources"
+				(change)="saveConfig()"></map-config>
+	</mat-sidenav>
+
+	<mat-sidenav-content>
+		<ng-container *ngIf="center">
+			<ng-container *ngFor="let source of enabledTileSources">
+				<map-tile-layer [source]="source" [center]="center" [zoom]="zoom"
+						[style.opacity]="config.sources.tile.forName(source.name).opacity"></map-tile-layer>
+			</ng-container>
+		</ng-container>
+
+		<map-controls [(center)]="center" [(zoom)]="zoom" [(autoCenter)]="config.autoCenter"></map-controls>
+
+		<map-poi-layer [sources]="enabledPoiSources" [center]="center" [zoom]="zoom"></map-poi-layer>
+
+		<button type="button" mat-button (click)="sidenav.toggle()" class="toggle-settings"></button>
+	</mat-sidenav-content>
+</mat-sidenav-container>
+

@@ -1,0 +1,19 @@
+:host, mat-sidenav-content {
+	display: block;
+	height: 100%;
+	overflow: hidden;
+	position: relative;
+	width: 100%;
+
+	> * {
+		display: block;
+		left: 0;
+		position: absolute;
+		top: 0;
+	}
+
+	> *:not(button) {
+		height: 100%;
+		width: 100%;
+	}
+}
