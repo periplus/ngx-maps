@@ -29,6 +29,7 @@ import { MapConfigSerializer } from './MapConfigSerializer';
 import { Tracker } from './Tracker';
 import { GpsTracker } from './GpsTracker';
 import { CoordinatesPipe } from './coordinates.pipe';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
 	declarations: [
@@ -52,7 +53,10 @@ import { CoordinatesPipe } from './coordinates.pipe';
 		MatSidenavModule,
 		MatSliderModule,
 		MatSlideToggleModule,
-		OverlayModule
+		OverlayModule,
+		RouterModule.forRoot([
+			{ path: ":zoom/:latitude/:longitude", component: MapComponent }
+		])
 	],
 	providers: [
 		{ provide: Projection, useValue: new MathProjection() },

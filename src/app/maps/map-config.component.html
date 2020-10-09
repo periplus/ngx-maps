@@ -31,3 +31,11 @@
 		</li>
 	</ul>
 </mat-expansion-panel>
+
+<mat-expansion-panel>
+	<mat-expansion-panel-header>
+		<h2>Navigation</h2>
+    </mat-expansion-panel-header>
+
+	<mat-checkbox [(ngModel)]="config.syncUrl" (change)="change.emit(config)">Synchronize URL</mat-checkbox>
+</mat-expansion-panel>

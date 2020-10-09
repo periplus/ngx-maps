@@ -29,7 +29,7 @@ export abstract class BaseLayerComponent {
 
 	@Output("headingChange") headingChange = new EventEmitter<number>();
 
-	private _center: Coordinates = {latitude: 45.617843, longitude: 25.694046,
+	private _center: Partial<Coordinates> = {latitude: 45.617843, longitude: 25.694046,
 			accuracy: 0,
 			altitude: 650,
 			altitudeAccuracy: 0,
@@ -37,11 +37,11 @@ export abstract class BaseLayerComponent {
 			speed: 0
 			};
 
-	public get center(): Coordinates {
+	public get center(): Partial<Coordinates> {
 		return this._center;
 	}
 
-	@Input("center") public set center(value: Coordinates) {
+	@Input("center") public set center(value: Partial<Coordinates>) {
 		if (!value) {
 			return;
 		}
@@ -53,7 +53,7 @@ export abstract class BaseLayerComponent {
 		this.centerChange.emit(value);
 	}
 
-	@Output("centerChange") centerChange = new EventEmitter<Coordinates>();
+	@Output("centerChange") centerChange = new EventEmitter<Partial<Coordinates>>();
 
 	private _zoom = ZoomLevel.CITY;
 
@@ -78,7 +78,7 @@ export abstract class BaseLayerComponent {
 
 	@HostBinding("style.opacity") opacity: number;
 
-	public getMapPositionInPx(c: Coordinates): Point {
+	public getMapPositionInPx(c: Partial<Coordinates>): Point {
 		return this.projection.toScreen(c, this.zoom);
 	}
 
@@ -112,7 +112,7 @@ export abstract class BaseLayerComponent {
 	}
 
 	protected get coordinatesBBox(): BoundingBox {
-		return BoundingBox.getBBoxCoordinaterForMapViewport(this.projection, this.center, this.zoom, this.width, this.height);
+		return BoundingBox.getBBoxCoordinaterForMapViewport(this.projection, this.center as Coordinates, this.zoom, this.width, this.height);
 	}
 
 	public get width(): number {

@@ -13,7 +13,7 @@
 			</ng-container>
 		</ng-container>
 
-		<map-controls [(center)]="center" [(zoom)]="zoom" [(autoCenter)]="config.autoCenter"></map-controls>
+		<map-controls [(center)]="center" [(zoom)]="zoom" [(autoCenter)]="config.autoCenter" [(syncUrl)]="config.syncUrl"></map-controls>
 
 		<map-poi-layer [sources]="enabledPoiSources" [center]="center" [zoom]="zoom"></map-poi-layer>
 

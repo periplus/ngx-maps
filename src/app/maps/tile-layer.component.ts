@@ -53,7 +53,7 @@ export class TileLayerComponent extends BaseLayerComponent implements OnInit {
 	private offsetTile = 1;
 
 	public get bounds(): BoundingBox {
-		const bounds = BoundingBox.getBBoxInTilesForMapViewport(this.projection, this.center, this.zoom,
+		const bounds = BoundingBox.getBBoxInTilesForMapViewport(this.projection, this.center as Coordinates, this.zoom,
 				this.width, this.height,
 				this.source.tileSize);
 		bounds.top -= this.offsetTile;

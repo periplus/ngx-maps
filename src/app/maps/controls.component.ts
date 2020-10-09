@@ -5,6 +5,8 @@ import { Point, watch, PointUtils, Projection, ZoomLevel } from 'ts-geo';
 import { BaseLayerComponent } from './base-layer.component';
 import { GpsTracker } from './GpsTracker';
 import { Tracker } from './Tracker';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 export enum MouseButton { LEFT, MIDDLE, RIGHT }
 
@@ -20,13 +22,75 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 	constructor(cdr: ChangeDetectorRef, host: ElementRef, projection: Projection,
 			public readonly tracker: Tracker,
 			public readonly contextMenuService: ContextMenuService,
-			private clipboard: Clipboard) {
+			private readonly clipboard: Clipboard,
+			private readonly router: Router,
+			private readonly activatedRoute: ActivatedRoute) {
 		super(cdr, host, projection);
 	}
 
 	navExpanded: boolean;
 
 	@ViewChild(ContextMenuComponent) public contextMenu: ContextMenuComponent;
+
+	ngOnInit() {
+		this.startFollowMe();
+		this.syncUrl = true;
+	}
+
+	private paramsSubscription: Subscription;
+	private centerSubscription: Subscription;
+	private zoomSubscription: Subscription;
+
+	public get syncUrl(): boolean {
+		return this.paramsSubscription && !this.paramsSubscription.closed;
+	}
+
+	@Input("syncUrl") public set syncUrl(value: boolean) {
+		if (value && !this.paramsSubscription) {
+			this.paramsSubscription = this.activatedRoute.params.subscribe((params) => {
+				this.updateFromUri(params);
+			});
+			this.updateFromUri(this.activatedRoute.snapshot.params);
+
+			this.centerSubscription = this.centerChange.subscribe(() => this.updateUri());
+			this.zoomSubscription = this.zoomChange.subscribe(() => this.updateUri());
+		}
+		if (!value) {
+			this.stop(this.paramsSubscription);
+			delete this.paramsSubscription;
+			this.stop(this.centerSubscription);
+			delete this.centerSubscription;
+			this.stop(this.zoomSubscription);
+			delete this.zoomSubscription;
+		}
+	}
+
+	private stop(subscription: Subscription) {
+		if (subscription && !subscription.closed) {
+			subscription.unsubscribe();
+		}
+	}
+
+	private updateUri() {
+		if (!this.syncUrl) {
+			return;
+		}
+		if ((typeof this.zoom === "undefined") || (typeof this.center === "undefined")) {
+			return;
+		}
+		this.router.navigate(["/", this.zoom, this.center.latitude, this.center.longitude]);
+	}
+
+	private updateFromUri(params: Params) {
+		if (!this.syncUrl) {
+			return;
+		}
+		if ((typeof params.zoom === "undefined") || (typeof params.latitude === "undefined") || (typeof params.longitude === "undefined")) {
+			return;
+		}
+		this.zoom = params.zoom;
+		this.center = {latitude: params.latitude, longitude: params.longitude};
+	}
 
 	@HostListener("contextmenu", ['$event'])
 	public showContextMenu(event: MouseEvent): void {
@@ -43,10 +107,6 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 
 	public copyToClipboard(c: Coordinates) {
 		this.clipboard.copy(`${c.latitude}, ${c.longitude}`);
-	}
-
-	ngOnInit() {
-		this.startFollowMe();
 	}
 
 	public trackError: any;

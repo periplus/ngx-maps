@@ -19,7 +19,8 @@ export class MapConfigSources<T extends SourceConfig> extends Array<T> {
 
 export class MapConfig {
 	autoCenter: boolean;
-	center: Coordinates;
+	syncUrl: boolean;
+	center: Partial<Coordinates>;
 	zoom: number;
 	navExpanded: boolean;
 	sources = {
@@ -66,6 +67,5 @@ export class MapConfigComponent {
 		}
 		this.change.emit(this.config);
 	}
-
 
 }
