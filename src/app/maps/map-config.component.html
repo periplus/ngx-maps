@@ -5,7 +5,8 @@
 
 	<ul cdkDropList [cdkDropListData]="config.sources.tile" (cdkDropListDropped)="drop($event)">
 		<li *ngFor="let sourceConfig of config.sources.tile" cdkDrag [cdkDragData]="sourceConfig">
-			<mat-slide-toggle [checked]="!sourceConfig.disabled" (toggleChange)="toggle(sourceConfig)"></mat-slide-toggle>
+
+			<mat-checkbox class="visibility" [checked]="!sourceConfig.disabled" (change)="toggle(sourceConfig)"></mat-checkbox>
 			<label [class.disabled]="sourceConfig.disabled" cdkDragHandle>{{sourceConfig.name}}</label>
 			<mat-slider
 					min="0" max="1" step="0.01" tickInterval="10" value="1"
@@ -25,7 +26,7 @@
 
 	<ul>
 		<li *ngFor="let sourceConfig of config.sources.poi">
-			<mat-slide-toggle [checked]="!sourceConfig.disabled" (toggleChange)="toggle(sourceConfig)"></mat-slide-toggle>
+			<mat-checkbox class="visibility" [checked]="!sourceConfig.disabled" (change)="toggle(sourceConfig)"></mat-checkbox>
 			<label [class.disabled]="sourceConfig.disabled">{{sourceConfig.name}}</label>
 		</li>
 	</ul>

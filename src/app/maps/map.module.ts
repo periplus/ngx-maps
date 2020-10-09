@@ -6,6 +6,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSliderModule } from "@angular/material/slider";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
@@ -27,6 +28,7 @@ import { LocalStorageMapConfigSerializer } from './LocalStorageMapConfigSerializ
 import { MapConfigSerializer } from './MapConfigSerializer';
 import { Tracker } from './Tracker';
 import { GpsTracker } from './GpsTracker';
+import { CoordinatesPipe } from './coordinates.pipe';
 
 @NgModule({
 	declarations: [
@@ -45,6 +47,7 @@ import { GpsTracker } from './GpsTracker';
 		DragDropModule,
 		FormsModule,
 		HttpClientModule,
+		MatCheckboxModule,
 		MatExpansionModule,
 		MatSidenavModule,
 		MatSliderModule,
@@ -68,5 +71,5 @@ export class MapModule {
 			TileLayerComponent,
 			POILayerComponent
 			];
-	public static PIPES = [ TileUrlPipe ];
+	public static PIPES = [ CoordinatesPipe, TileUrlPipe ];
 }

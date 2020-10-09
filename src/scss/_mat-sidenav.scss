@@ -1,5 +1,9 @@
 @import "fontawesome";
 
+.mat-drawer-container {
+	color: inherit;
+}
+
 mat-sidenav {
 	background-color: rgba($color: white, $alpha: .7);
 	max-width: 100%;

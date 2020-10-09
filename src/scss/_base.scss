@@ -1,0 +1,65 @@
+@import "fontawesome";
+
+html, body {
+	color: var(--text-primary-color);
+	font-size: 12px;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+h1, h2 {
+	margin: .5em;
+
+	&:first-child {
+		margin-top: 0;
+	}
+}
+
+h1 {
+	font-size: 1.2em;
+}
+
+h2 {
+	font-size: 1.1em;
+}
+
+button {
+	background: transparent;
+	border: none;
+	outline: none;
+
+	&.expand {
+		&:after {
+			@include fa-icon($fa-var-chevron-down);
+		}
+	}
+
+	&.collapse {
+		&:after {
+			@include fa-icon($fa-var-chevron-up);
+		}
+	}
+}
+
+a {
+	text-decoration: none;
+
+	&[target="_blank"]:after {
+		@include fa-icon($fa-var-external-link);
+		font-size: .5em;
+		padding-right: .5em;
+		vertical-align: top;
+	}
+}
+
+label {
+	display: inline-block;
+	margin-right: .5em;
+	vertical-align: middle;
+
+	&.disabled {
+		text-decoration: line-through;
+	}
+}

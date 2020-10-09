@@ -1,78 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-html, body {
-	font-size: 12px;
-	height: 100%;
-	margin: 0;
-	padding: 0;
-	width: 100%;
-}
-
 //@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 @import "scss/mat-theme-green";
 @import '~@angular/material/theming';
 
+@import "scss/base";
 @import "scss/cdk-drag";
+@import "scss/controls";
 @import "scss/map";
+@import "scss/mat-checkbox";
 @import "scss/mat-expansion";
 @import "scss/mat-sidenav";
 @import "scss/mat-slider";
 @import "scss/mat-slide-toggle";
-@import "scss/me";
 @import "scss/overlay";
 @import "scss/wikipedia";
-
-
-h1, h2, sp {
-	margin: .5em;
-
-	&:first-child {
-		margin-top: 0;
-	}
-}
-
-h1 {
-	font-size: 1.2em;
-}
-
-h2 {
-	font-size: 1.1em;
-}
-
-button {
-	background: transparent;
-	border: none;
-	outline: none;
-
-	&.expand {
-		&:after {
-			@include fa-icon($fa-var-chevron-down);
-		}
-	}
-
-	&.collapse {
-		&:after {
-			@include fa-icon($fa-var-chevron-up);
-		}
-	}
-}
-
-a {
-	text-decoration: none;
-
-	&[target="_blank"]:after {
-		@include fa-icon($fa-var-external-link);
-		font-size: .5em;
-		padding-right: .5em;
-		vertical-align: top;
-	}
-}
-
-label {
-	display: inline-block;
-	margin-right: .5em;
-	vertical-align: middle;
-
-	&.disabled {
-		text-decoration: line-through;
-	}
-}

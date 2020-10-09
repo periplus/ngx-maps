@@ -1,0 +1,33 @@
+@import "fontawesome";
+@import "vars";
+
+map-controls {
+	color: mat-color(map-get($theme-colors, primary));
+	text-shadow: $thin $thin var(--text-primary-color);
+    font-weight: bold;
+}
+
+.me {
+	color: mat-color(map-get($theme-colors, primary), darker);
+	position: absolute;
+
+	&:before {
+		@include fa-icon($fa-var-bullseye);
+	}
+}
+
+.follow-me {
+	color: mat-color(map-get($theme-colors, primary), lighter);
+
+	&.active {
+		color: mat-color(map-get($theme-colors, primary), darker);
+	}
+
+	&.error {
+		color: mat-color(map-get($theme-colors, warn));
+	}
+
+	&:before {
+		@include fa-icon($fa-var-bullseye);
+	}
+}

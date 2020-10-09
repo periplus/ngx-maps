@@ -103,23 +103,23 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 		this.zoom += zoomDelta;
 	}
 
-	private startDragPoint: Point;
-
 	private getCursorPositionInViewport(event: MouseEvent) {
 		return new Point(event.offsetX, event.offsetY);
 	}
 
-	public mouseCoordinates: Partial<Coordinates>;
+	private startDragPoint: Point;
+	public startDragCoordinates: Partial<Coordinates>;
+	public cursorCoordinates: Partial<Coordinates>;
 
 	@HostListener("mousemove", ["$event"])
 	handleMove(event: DragEvent) {
-		this.mouseCoordinates = this.getCoordinatesForViewportPosition(this.getCursorPositionInViewport(event));
-		this.cdr.markForCheck();
+		this.cursorCoordinates = this.getCoordinatesForViewportPosition(this.getCursorPositionInViewport(event));
 	}
 
 	@HostListener("mousedown", ["$event"])
 	handleDragStart(event: DragEvent) {
 		this.startDragPoint = this.getCursorPositionInViewport(event);
+		this.startDragCoordinates =  this.getCoordinatesForViewportPosition(this.startDragPoint);
 	}
 
 	@HostListener("mouseup", ["$event"])
@@ -135,6 +135,7 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 				break;
 		}
 		delete this.startDragPoint;
+		delete this.startDragCoordinates;
 	}
 
 	private moveCenterByPx(delta: Point) {
