@@ -27,6 +27,10 @@ export class MapConfig {
 			poi: new MapConfigSources<SourceConfig>(),
 			tile: new MapConfigSources<TileSourceConfig>()
 			};
+	geoRef = {
+		show: false,
+		disable: false
+	};
 }
 
 @Component({

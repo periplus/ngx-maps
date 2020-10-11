@@ -1,23 +1,26 @@
 <div class="me" [style]="myPositionAsCSS"></div>
-<nav>
-	<button (click)="navExpanded = !navExpanded"
-			[class.expand]="!navExpanded" [class.collapse]="navExpanded"></button>
-	<ng-container *ngIf="navExpanded">
-		<button class="follow-me" [title]="trackError || 'Follow me'" (click)="autoCenter = true"
-				[class.active]="autoCenter"
-				[class.error]="!!trackError"></button>
-		<mat-slider
-				[min]="ZoomLevel.MIN" [max]="ZoomLevel.MAX"
-				[(ngModel)]="zoom"
-				invert vertical step="1" tickInterval="1"
-				[title]="'Zoom:' + zoom">
-		</mat-slider>
-	</ng-container>
-</nav>
-<div class="cursorCoordinates">
-	<span *ngIf="startDragCoordinates">{{startDragCoordinates.latitude | coordinates}}, {{startDragCoordinates.longitude | coordinates}} &#x1f83e;</span>
-	<span *ngIf="cursorCoordinates">{{cursorCoordinates.latitude | coordinates}}, {{cursorCoordinates.longitude | coordinates}}</span>
+
+
+<mat-expansion-panel class="toolbox vertical" cdkDrag>
+	<mat-expansion-panel-header cdkDragHandle></mat-expansion-panel-header>
+
+	<button class="follow-me" [title]="trackError || 'Follow me'" (click)="autoCenter = true"
+			[class.active]="autoCenter"
+			[class.error]="!!trackError"></button>
+	<mat-slider
+			[min]="ZoomLevel.MIN" [max]="ZoomLevel.MAX"
+			[(ngModel)]="zoom"
+			invert vertical step="1" tickInterval="1"
+			[title]="'Zoom:' + zoom">
+	</mat-slider>
+</mat-expansion-panel>
+
+
+<div class="coordinates">
+	<span class="startDrag" *ngIf="startDragCoordinates">{{startDragCoordinates.latitude | coordinates}}, {{startDragCoordinates.longitude | coordinates}}</span>
+	<span class="cursor" *ngIf="cursorCoordinates">{{cursorCoordinates.latitude | coordinates}}, {{cursorCoordinates.longitude | coordinates}}</span>
 </div>
+
 <context-menu>
 	<ng-template contextMenuItem let-item [passive]="true">
 		<span>{{item.latitude | coordinates}}, {{item.longitude | coordinates}}</span>

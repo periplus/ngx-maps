@@ -41,6 +41,12 @@ button {
 			@include fa-icon($fa-var-chevron-up);
 		}
 	}
+
+	&.image {
+		&:after {
+			@include fa-icon($fa-var-image);
+		}
+	}
 }
 
 a {

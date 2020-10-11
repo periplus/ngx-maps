@@ -6,3 +6,32 @@
 		height: 4em;
 	}
 }
+
+.toolbox.vertical {
+	background-color: rgba(mat-color(map-get($theme-colors, accent)), 0.5);
+	display: flex;
+	flex-flow: column;
+	overflow: hidden;
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 30px;
+
+	.mat-expansion-panel-header {
+		height: 2em;
+		padding: 0 1em;
+
+		.mat-content {
+			display: none;
+		}
+	}
+
+	.mat-expansion-panel-body {
+		padding: 0;
+		text-align: center;
+	}
+
+	mat-slider {
+		max-width: 100%;
+	}
+}

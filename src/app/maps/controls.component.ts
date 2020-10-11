@@ -94,6 +94,9 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 
 	@HostListener("contextmenu", ['$event'])
 	public showContextMenu(event: MouseEvent): void {
+		if (event.target !== this.host.nativeElement) {
+			return;
+		}
 		const p = this.getCoordinatesForViewportPosition(this.getCursorPositionInViewport(event));
 		this.contextMenuService.show.next({
 			// Optional - if unspecified, all context menu components will open
@@ -173,17 +176,31 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 
 	@HostListener("mousemove", ["$event"])
 	handleMove(event: DragEvent) {
+		if (event.target !== this.host.nativeElement) {
+			return;
+		}
 		this.cursorCoordinates = this.getCoordinatesForViewportPosition(this.getCursorPositionInViewport(event));
+	}
+
+	@HostListener("mouseleave")
+	handleMoveleave() {
+		delete this.cursorCoordinates;
 	}
 
 	@HostListener("mousedown", ["$event"])
 	handleDragStart(event: DragEvent) {
+		if (event.target !== this.host.nativeElement) {
+			return;
+		}
 		this.startDragPoint = this.getCursorPositionInViewport(event);
 		this.startDragCoordinates =  this.getCoordinatesForViewportPosition(this.startDragPoint);
 	}
 
 	@HostListener("mouseup", ["$event"])
 	handleDragEnd(event: DragEvent) {
+		if (event.target !== this.host.nativeElement) {
+			return;
+		}
 		const endDragPoint = this.getCursorPositionInViewport(event);
 		const delta = PointUtils.delta(endDragPoint, this.startDragPoint);
 		switch (event.button) {

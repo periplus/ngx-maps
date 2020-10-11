@@ -17,6 +17,8 @@
 
 		<map-poi-layer [sources]="enabledPoiSources" [center]="center" [zoom]="zoom"></map-poi-layer>
 
+		<map-geo-ref-layer *ngIf="config.geoRef?.show"></map-geo-ref-layer>
+
 		<button type="button" mat-button (click)="sidenav.toggle()" class="toggle-settings"></button>
 	</mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,0 +1,9 @@
+<input type="file" hidden #fileInput (click)="fileInput.value = null"
+		(input)="handleInputChange($event)" (change)="handleInputChange($event)"/>
+
+
+<mat-expansion-panel class="toolbox vertical" cdkDrag>
+	<mat-expansion-panel-header cdkDragHandle></mat-expansion-panel-header>
+
+	<button class="image" (click)="browse()"></button>
+</mat-expansion-panel>
