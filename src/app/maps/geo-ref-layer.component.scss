@@ -1,6 +1,47 @@
 .toolbox.vertical {
 	bottom: 1em;
 	left: unset;
+	pointer-events: all;
 	right: 1em;
 	top: unset;
+	width: 3em;
+
+	label {
+		span {
+			display: inline-block;
+			text-align: center;
+			width: 1em;
+		}
+	}
+
+	input {
+		display: inline-block;
+		margin: auto;
+		text-align: right;
+		width: 4em;
+	}
+}
+
+img {
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	position: absolute;
+	right: 0;
+	top: 0;
+	user-select: none;
+}
+
+:host {
+	height: 0;
+	overflow: visible;
+	pointer-events: none;
+	position: static;
+	width: 0;
+
+	&.image-selected {
+		.toolbox.vertical {
+			width: 7em;
+		}
+	}
 }

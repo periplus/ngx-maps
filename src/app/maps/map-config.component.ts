@@ -28,7 +28,7 @@ export class MapConfig {
 			tile: new MapConfigSources<TileSourceConfig>()
 			};
 	geoRef = {
-		show: false,
+		show: true,
 		disable: false
 	};
 }

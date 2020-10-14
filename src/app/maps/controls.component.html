@@ -17,8 +17,12 @@
 
 
 <div class="coordinates">
-	<span class="startDrag" *ngIf="startDragCoordinates">{{startDragCoordinates.latitude | coordinates}}, {{startDragCoordinates.longitude | coordinates}}</span>
+	<span class="dragFrom" *ngIf="startDragCoordinates">{{startDragCoordinates.latitude | coordinates}}, {{startDragCoordinates.longitude | coordinates}}</span>
 	<span class="cursor" *ngIf="cursorCoordinates">{{cursorCoordinates.latitude | coordinates}}, {{cursorCoordinates.longitude | coordinates}}</span>
+</div>
+
+<div class="attrition">
+	<a *ngFor="let provider of providers" [innerHtml]="provider.attrition" [href]="provider.attritionUrl"></a>
 </div>
 
 <context-menu>

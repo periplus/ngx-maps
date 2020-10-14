@@ -1,9 +1,29 @@
 <input type="file" hidden #fileInput (click)="fileInput.value = null"
 		(input)="handleInputChange($event)" (change)="handleInputChange($event)"/>
 
+<img #image *ngIf="imageUrl" [src]="imageUrl" alt="Process image using the toolbox"
+		draggable="false" (dragstart)="false;"
+		[style.transform]="imageTransform"
+		[style.opacity]="opacity"
+		[style.pointer-events]="pointerEvents"
+		(mousewheel)="handleMouseWheel($event)"
+		(wheel)="handleMouseWheel($event)"/>
 
 <mat-expansion-panel class="toolbox vertical" cdkDrag>
 	<mat-expansion-panel-header cdkDragHandle></mat-expansion-panel-header>
 
-	<button class="image" (click)="browse()"></button>
+	<button class="image" (click)="browse()" title="Choose image to geo-reference"></button>
+
+	<ng-container *ngIf="imageFile">
+		<label title="Move along X"><span>&#x2194;</span> <input type="number" step="1" [(ngModel)]="x"/></label>
+
+		<label title="Move along Y"><span>&#x2195;</span><input type="number" step="1" [(ngModel)]="y"/></label>
+
+		<label title="Scale image"><span class="scale"></span> <input type="number" min="0" step="0.001" [(ngModel)]="scale"/></label>
+
+		<label title="Rotate image by degrees"><span>&#x27f3;</span> <input type="number" min="-180" max="180" step="0.1" [(ngModel)]="rotation"/></label>
+
+		<label title="Opacity"><span class="opacity"></span> <input type="number" min="0" max="1" step="0.01" [(ngModel)]="opacity"/></label>
+	</ng-container>
+
 </mat-expansion-panel>

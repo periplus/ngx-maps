@@ -49,6 +49,18 @@ button {
 	}
 }
 
+.opacity {
+	&:after {
+		@include fa-icon($fa-var-adjust);
+	}
+}
+
+.scale {
+	&:after {
+		@include fa-icon($fa-var-search);
+	}
+}
+
 a {
 	text-decoration: none;
 
@@ -68,4 +80,8 @@ label {
 	&.disabled {
 		text-decoration: line-through;
 	}
+}
+
+ol, ul {
+	list-style-type: none;
 }

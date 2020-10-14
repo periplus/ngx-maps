@@ -1,0 +1,10 @@
+@mixin prefix($declarations, $prefixes: (moz webkit ms)) {
+	@each $property, $value in $declarations {
+		@each $prefix in $prefixes {
+			#{'-' + $prefix + '-' + $property}: $value;
+		}
+
+		// Output standard non-prefixed declaration
+		#{$property}: $value;
+	}
+}

@@ -3,7 +3,7 @@
 		<h2>Tiles</h2>
     </mat-expansion-panel-header>
 
-	<ul cdkDropList [cdkDropListData]="config.sources.tile" (cdkDropListDropped)="drop($event)">
+	<ol cdkDropList [cdkDropListData]="config.sources.tile" (cdkDropListDropped)="drop($event)">
 		<li *ngFor="let sourceConfig of config.sources.tile" cdkDrag [cdkDragData]="sourceConfig">
 
 			<mat-checkbox class="visibility" [checked]="!sourceConfig.disabled" (change)="toggle(sourceConfig)"></mat-checkbox>
@@ -16,7 +16,7 @@
 					[disabled]="sourceConfig.disabled">
 			</mat-slider>
 		</li>
-	</ul>
+	</ol>
 </mat-expansion-panel>
 
 <mat-expansion-panel>

@@ -1,8 +1,9 @@
 import { CdkOverlayOrigin } from '@angular/cdk/overlay';
-import { ChangeDetectionStrategy, Component, HostListener, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { BaseLayerComponent } from './base-layer.component';
 import { POI, POISource } from 'ts-geo';
 import { isEqual } from "lodash-es";
+import { Subscription } from 'rxjs';
 
 @Component({
 	selector: 'map-poi-layer',
@@ -10,7 +11,7 @@ import { isEqual } from "lodash-es";
 	styleUrls: ['./poi-layer.component.scss'],
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class POILayerComponent extends BaseLayerComponent implements OnInit {
+export class POILayerComponent extends BaseLayerComponent implements OnInit, OnDestroy {
 
 	private _sources: POISource[];
 
@@ -38,6 +39,18 @@ export class POILayerComponent extends BaseLayerComponent implements OnInit {
 		this.reload();
 	}
 
+	ngOnDestroy() {
+		this.cancel();
+	}
+
+	private subscriptions: Subscription[];
+
+	private cancel() {
+		if (this.subscriptions) {
+			this.subscriptions.forEach(s => !s.closed && s.unsubscribe());
+		}
+	}
+
 	private reload() {
 		const bbox = this.coordinatesBBox;
 
@@ -48,7 +61,10 @@ export class POILayerComponent extends BaseLayerComponent implements OnInit {
 		bbox.right = right;
 
 		this.pois = [];
-		this.sources.forEach(source =>
+
+		this.cancel();
+
+		this.subscriptions = this.sources.map(source =>
 				source.get(bbox, this.zoom).subscribe(pois => {
 					pois.forEach(poi => poi.source = source);
 					this.pois.push(...pois);

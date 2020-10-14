@@ -1,14 +1,24 @@
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Clipboard } from '@angular/cdk/clipboard';
-import { ContextMenuComponent, ContextMenuService } from 'ngx-contextmenu';
-import { Point, watch, PointUtils, Projection, ZoomLevel } from 'ts-geo';
-import { BaseLayerComponent } from './base-layer.component';
-import { GpsTracker } from './GpsTracker';
-import { Tracker } from './Tracker';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Clipboard } from "@angular/cdk/clipboard";
+import {
+	ChangeDetectorRef,
+	Component,
+	ElementRef,
+	EventEmitter,
+	HostListener,
+	Input,
+	OnInit,
+	Output,
+	ViewChild
+} from "@angular/core";
+import { ActivatedRoute, Params, Router } from "@angular/router";
+import { ContextMenuComponent, ContextMenuService } from "ngx-contextmenu";
+import { Subscription } from "rxjs";
+import { Point, PointUtils, Projection, Provider, ZoomLevel } from "ts-geo";
 
-export enum MouseButton { LEFT, MIDDLE, RIGHT }
+import { BaseLayerComponent } from "./base-layer.component";
+import { getCursorPositionInViewport, MouseButton } from "./browser";
+import { Tracker } from "./Tracker";
+
 
 @Component({
 	selector: 'map-controls',
@@ -97,7 +107,7 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 		if (event.target !== this.host.nativeElement) {
 			return;
 		}
-		const p = this.getCoordinatesForViewportPosition(this.getCursorPositionInViewport(event));
+		const p = this.getCoordinatesForViewportPosition(getCursorPositionInViewport(event));
 		this.contextMenuService.show.next({
 			// Optional - if unspecified, all context menu components will open
 			contextMenu: this.contextMenu,
@@ -155,19 +165,15 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 
 	@HostListener('mousewheel', ['$event'])
 	handleWheel(event: WheelEvent) {
-		const zoomDelta = Math.sign(-event.deltaY) * Math.round(Math.max(Math.abs(event.deltaY), 300) / 300);
+		const zoomDelta = event.deltaY * -0.01;
 
 		// move center only if zoom in
 		if (zoomDelta > 0  && !this.autoCenter) {
-			const d = PointUtils.delta(new Point(this.width / 2, this.height / 2), this.getCursorPositionInViewport(event));
+			const d = PointUtils.delta(new Point(this.width / 2, this.height / 2), getCursorPositionInViewport(event));
 			this.moveCenterByPx(d);
 		}
 
 		this.zoom += zoomDelta;
-	}
-
-	private getCursorPositionInViewport(event: MouseEvent) {
-		return new Point(event.offsetX, event.offsetY);
 	}
 
 	private startDragPoint: Point;
@@ -179,7 +185,7 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 		if (event.target !== this.host.nativeElement) {
 			return;
 		}
-		this.cursorCoordinates = this.getCoordinatesForViewportPosition(this.getCursorPositionInViewport(event));
+		this.cursorCoordinates = this.getCoordinatesForViewportPosition(getCursorPositionInViewport(event));
 	}
 
 	@HostListener("mouseleave")
@@ -192,7 +198,7 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 		if (event.target !== this.host.nativeElement) {
 			return;
 		}
-		this.startDragPoint = this.getCursorPositionInViewport(event);
+		this.startDragPoint = getCursorPositionInViewport(event);
 		this.startDragCoordinates =  this.getCoordinatesForViewportPosition(this.startDragPoint);
 	}
 
@@ -201,7 +207,7 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 		if (event.target !== this.host.nativeElement) {
 			return;
 		}
-		const endDragPoint = this.getCursorPositionInViewport(event);
+		const endDragPoint = getCursorPositionInViewport(event);
 		const delta = PointUtils.delta(endDragPoint, this.startDragPoint);
 		switch (event.button) {
 			case MouseButton.LEFT:
@@ -224,5 +230,7 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 		this.autoCenter = false;
 		this.center = Object.assign({}, this.center, this.projection.toGeo(centerPx, this.zoom));
 	}
+
+	@Input("providers") providers: Provider[];
 
 }

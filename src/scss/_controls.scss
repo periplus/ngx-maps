@@ -5,6 +5,11 @@ map-controls {
 	color: mat-color(map-get($theme-colors, primary));
 	text-shadow: $thin $thin var(--text-primary-color);
     font-weight: bold;
+
+	.toolbox.vertical {
+		left: unset;
+		right: 1em;
+	}
 }
 
 .me {
@@ -31,3 +36,39 @@ map-controls {
 		@include fa-icon($fa-var-bullseye);
 	}
 }
+
+.coordinates {
+	bottom: 0;
+	left: 50%;
+	position: absolute;
+
+	.dragFrom:after {
+		content: "\1F816";
+		padding-left: 1em;
+		padding-right: 1em;
+	}
+}
+
+.attrition {
+	bottom: 1em;
+	font-size: .8em;
+	position: absolute;
+	right: 10em;
+
+	a {
+		transition: font-size 0.2s ease-in-out 0s;
+
+		&:after {
+			border-right: solid 1px;
+		}
+
+		&:last-child:after {
+			border-right: none;
+		}
+
+		&:hover {
+			font-size: 1.5em;
+		}
+	}
+}
+

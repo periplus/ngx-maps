@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Inject, InjectionToken, Input, ViewChild } from "@angular/core";
-import { DEFAULT_TILE_SOURCE, Projection, TileSource, POISource } from 'ts-geo';
+import { DEFAULT_TILE_SOURCE, Projection, TileSource, POISource, Provider } from 'ts-geo';
 
 import { BaseLayerComponent } from "./base-layer.component";
 import { ControlsComponent } from './controls.component';
@@ -50,6 +50,19 @@ export class MapComponent extends BaseLayerComponent {
 		}
 		return this.config.sources.tile.filter(c => !c.disabled).map(c =>
 				this.tileSources.find(s => s.name === c.name));
+	}
+
+	public get enabledProviders(): Provider[] {
+		const providers: Provider[] = [];
+		this.enabledPoiSources.map(s => s.provider).concat(this.enabledTileSources.map(s => s.provider)).forEach(p => {
+			if (!p) {
+				return;
+			}
+			if (!providers.find(existing => existing?.name === p?.name)) {
+				providers.push(p);
+			}
+		});
+		return providers;
 	}
 
 	private createDefaultConfig() {
