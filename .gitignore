@@ -4,7 +4,7 @@
 /dist
 /tmp
 /out-tsc
-import-tile-servers.json
+/src/assets/tile-sources.json 
 # Only exists if Bazel was run
 /bazel-out
 
