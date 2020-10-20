@@ -4,6 +4,7 @@ export * from "./coordinates.pipe";
 export * from "./map.component";
 export * from "./map.module";
 export * from "./poi-layer.component";
+export * from "./query-layer.component";
 export * from "./tile-layer.component";
 export * from "./tile-url.pipe";
 export * from "./wikipedia-poi-source";

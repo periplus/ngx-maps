@@ -1,0 +1,15 @@
+<div class="field">
+	<label>Search and add:</label>
+	<input type="text" [(ngModel)]="query" (keyup.enter)="doQuery()" autofocus/>
+	<button mat-button [hidden]="!query" aria-label="Clear" class="clear" (click)="query=''"></button>
+</div>
+
+
+<ul *ngIf="results?.length" class="results">
+	<li *ngFor="let result of results" (click)="doSelect(result)">
+		<h2>{{result.name}}</h2>
+		<span>{{result.description}}</span>
+	</li>
+</ul>
+
+<span *ngIf="query && results?.length === 0">No results found</span>

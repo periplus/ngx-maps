@@ -72,4 +72,14 @@ export class MapConfigComponent {
 		this.change.emit(this.config);
 	}
 
+	public addSource(source: POISource | TileSource) {
+		const sourcesConfig = (<any>source).get instanceof Function ? this.config.sources.poi : this.config.sources.tile;
+		let sourceConfig = sourcesConfig.forName(source.name);
+		if (!sourceConfig) {
+			sourceConfig = new SourceConfig(source.name);
+			sourcesConfig.push(sourceConfig);
+		}
+		sourceConfig.disabled = false;
+		this.change.emit(this.config);
+	}
 }

@@ -3,6 +3,9 @@
 		<h2>Tiles</h2>
     </mat-expansion-panel-header>
 
+	<map-query-source #querySource [sources]="tileSources" [config]="config"
+			(select)="change.emit(config)"></map-query-source>
+
 	<ol cdkDropList [cdkDropListData]="config.sources.tile" (cdkDropListDropped)="drop($event)">
 		<li *ngFor="let sourceConfig of config.sources.tile" cdkDrag [cdkDragData]="sourceConfig">
 
@@ -23,6 +26,9 @@
 	<mat-expansion-panel-header>
 		<h2>POI</h2>
     </mat-expansion-panel-header>
+
+	<map-query-source #querySource [sources]="poiSources" [config]="config"
+			(select)="change.emit(config)"></map-query-source>
 
 	<ul>
 		<li *ngFor="let sourceConfig of config.sources.poi">

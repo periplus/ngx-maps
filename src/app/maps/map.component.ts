@@ -41,7 +41,7 @@ export class MapComponent extends BaseLayerComponent {
 		if (!this.config) {
 			return undefined;
 		}
-		return this.poiSources.filter(source => !this.config.sources.poi.forName(source.name).disabled);
+		return this.poiSources.filter(source => !this.config.sources.poi.forName(source.name)?.disabled);
 	}
 
 	public get enabledTileSources(): TileSource[] {

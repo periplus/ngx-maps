@@ -20,12 +20,14 @@ import tileSources from "../../assets/tile-sources.json";
 import { ControlsComponent } from "./controls.component";
 import { CoordinatesPipe } from "./coordinates.pipe";
 import { GeoRefLayerComponent } from "./geo-ref-layer.component";
+import { GeoNamesPOISource } from './geonames-poi-source';
 import { GpsTracker } from "./GpsTracker";
 import { LocalStorageMapConfigSerializer } from "./LocalStorageMapConfigSerializer";
 import { MapConfigComponent } from "./map-config.component";
 import { MapComponent, POI_SOURCES, TILE_SOURCES } from "./map.component";
 import { MapConfigSerializer } from "./MapConfigSerializer";
 import { POILayerComponent } from "./poi-layer.component";
+import { QuerySourceComponent } from './query-layer.component';
 import { TileLayerComponent } from "./tile-layer.component";
 import { TileUrlPipe } from "./tile-url.pipe";
 import { Tracker } from "./Tracker";
@@ -63,6 +65,7 @@ import { WikipediaPOISource } from "./wikipedia-poi-source";
 		{ provide: Projection, useValue: new MathProjection() },
 		{ provide: TILE_SOURCES, useValue: tileSources },
 		{ provide: POI_SOURCES, useClass: WikipediaPOISource, multi: true },
+		{ provide: POI_SOURCES, useClass: GeoNamesPOISource, multi: true },
 		{ provide: MapConfigSerializer, useClass: LocalStorageMapConfigSerializer },
 		{ provide: Tracker, useClass: GpsTracker }
 	],
@@ -74,6 +77,7 @@ export class MapModule {
 			MapConfigComponent,
 			ControlsComponent,
 			GeoRefLayerComponent,
+			QuerySourceComponent,
 			TileLayerComponent,
 			POILayerComponent
 			];

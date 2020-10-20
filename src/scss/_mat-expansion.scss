@@ -7,6 +7,10 @@
 	}
 }
 
+div.mat-expansion-panel-body {
+    padding: 0 2em 1em 4em;
+}
+
 .toolbox.vertical {
 	background-color: rgba(mat-color(map-get($theme-colors, accent)), 0.5);
 	display: flex;
@@ -30,7 +34,7 @@
 		}
 	}
 
-	.mat-expansion-panel-body {
+	div.mat-expansion-panel-body {
 		padding: 0;
 		text-align: center;
 	}

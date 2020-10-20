@@ -66,15 +66,16 @@ export class WikipediaPOISource implements POISource {
 				}));
 	}
 
-	private radius = 0.15;
+	private maxRequests = 2;
+	private maxRadius = 0.15;
 
 	get(mapbbox: BoundingBox, zoom: number): Observable<POI[]> {
 		if (zoom < ZoomLevel.CITY) {
 			return of([]);
 		}
-		mapbbox = BoundingBox.clipCenter(mapbbox, 2 * this.radius);
+		mapbbox = BoundingBox.clipCenter(mapbbox, this.maxRequests * this.maxRadius);
 		return this.getInfo(
-				forkJoin(BoundingBox.splitBBox(mapbbox, this.radius).map((bbox) => this.getPOIsForLimitedBBox(bbox)))
+				forkJoin(BoundingBox.splitBBox(mapbbox, this.maxRadius).map((bbox) => this.getPOIsForLimitedBBox(bbox)))
 					.pipe(map((pois) => flatten(pois)))
 				);
 	}

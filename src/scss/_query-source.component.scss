@@ -1,0 +1,26 @@
+map-query-source {
+	input {
+		width: 90%;
+	}
+
+	.results {
+		margin: 1em;
+		padding: 0;
+
+		li {
+			cursor: pointer;
+			margin-left: 2em;
+
+			&:before {
+				@include fa-icon($fa-var-plus);
+				float: left;
+				left: -1em;
+				position: relative;
+			}
+
+			&:hover {
+				color: mat-color(map-get($theme-colors, accent))
+			}
+		}
+	}
+}

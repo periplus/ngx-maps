@@ -7,8 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-	"e2e": "ng e2e",
-	"import-tile-servers": "ts-node import-tile-servers.ts"
+    "e2e": "ng e2e",
+    "import-tile-servers": "ts-node import-tile-servers.ts"
   },
   "private": true,
   "dependencies": {
@@ -24,6 +24,7 @@
     "@angular/router": "~10.1.3",
     "@mapbox/sphericalmercator": "latest",
     "@turf/projection": "latest",
+    "fuse.js": "latest",
     "lodash-es": "latest",
     "ngx-contextmenu": "latest",
     "proj4": "latest",

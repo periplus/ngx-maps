@@ -47,6 +47,12 @@ button {
 			@include fa-icon($fa-var-image);
 		}
 	}
+
+	&.delete, &.remove, &.clear {
+		&:after {
+			@include fa-icon($fa-var-times);
+		}
+	}
 }
 
 .opacity {
@@ -84,4 +90,11 @@ label {
 
 ol, ul {
 	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+[hidden] {
+    visibility: hidden;
+    display: block;
 }

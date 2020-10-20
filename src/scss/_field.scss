@@ -1,0 +1,13 @@
+.field {
+	display: flex;
+	width: 100%;
+
+	label {
+		flex: 0 auto;
+		white-space: nowrap;
+	}
+
+	input {
+		flex: 1 auto;
+	}
+}
