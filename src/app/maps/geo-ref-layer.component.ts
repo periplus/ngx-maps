@@ -122,7 +122,15 @@ export class GeoRefLayerComponent {
 		this.fileInput.nativeElement.click();
 	}
 
-	public scale = 1;
+	private _scale = 1;
+
+	public get scale(): number {
+		return this._scale;
+	}
+
+	public set scale(v: number) {
+		this._scale = MathUtils.clip(v, 0.1, 10);
+	}
 
 	handleMouseWheel(event: WheelEvent) {
 		if (!this.image || event.target !== this.image.nativeElement) {
@@ -131,16 +139,18 @@ export class GeoRefLayerComponent {
 		if (!event.deltaY) {
 			return;
 		}
-		const delta = event.deltaY * -0.01;
+		const delta = event.deltaY * -0.001;
 		if (event.shiftKey) {
-			this.opacity += delta;
+			this.opacity += MathUtils.clip(delta, 0.1, 1);
 			return;
 		}
-		if (event.buttons === MouseButton.RIGHT) {
+		if (event.ctrlKey || event.buttons === MouseButton.RIGHT) {
 			this.rotation += delta * 10;
+			event.preventDefault();
+			event.stopImmediatePropagation();
 			return;
 		}
-		this.scale += delta;
+		this.scale = this.scale + delta;
 	}
 
 	public position = new Point(0, 0);

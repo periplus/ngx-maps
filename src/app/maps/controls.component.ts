@@ -44,7 +44,6 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 
 	ngOnInit() {
 		this.startFollowMe();
-		this.syncUrl = true;
 	}
 
 	private paramsSubscription: Subscription;
@@ -73,7 +72,10 @@ export class ControlsComponent extends BaseLayerComponent implements OnInit {
 			this.stop(this.zoomSubscription);
 			delete this.zoomSubscription;
 		}
+		this.syncUrlChange.emit(value);
 	}
+
+	@Output("syncUrlChange") syncUrlChange = new EventEmitter<boolean>();
 
 	private stop(subscription: Subscription) {
 		if (subscription && !subscription.closed) {

@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, HostListener, Inject, InjectionToken, Input, ViewChild } from "@angular/core";
-import { DEFAULT_TILE_SOURCE, Projection, TileSource, POISource, Provider } from 'ts-geo';
+import { DEFAULT_TILE_SOURCE, Projection, TileSource, POISource, Provider, ZoomLevel } from 'ts-geo';
 
 import { BaseLayerComponent } from "./base-layer.component";
 import { ControlsComponent } from './controls.component';
@@ -66,11 +66,15 @@ export class MapComponent extends BaseLayerComponent {
 	}
 
 	private createDefaultConfig() {
-		this.config = new MapConfig();
+		const config = new MapConfig();
+		config.syncUrl = true;
+		config.zoom = ZoomLevel.CITY;
+		config.autoCenter = true;
 		this.tileSources.forEach(source =>
-				this.config.sources.tile.push(new TileSourceConfig(source.name)));
+				config.sources.tile.push(new TileSourceConfig(source.name)));
 		this.poiSources.forEach(source =>
-				this.config.sources.poi.push(new SourceConfig(source.name)));
+				config.sources.poi.push(new SourceConfig(source.name)));
+		this.config = config;
 	}
 
 	private loadConfig() {
