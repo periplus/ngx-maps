@@ -2,7 +2,7 @@ import { Component, ElementRef, HostBinding, HostListener, ViewChild } from "@an
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
 import { MathUtils, Point, PointUtils } from "ts-geo";
 
-import { getCursorPositionInViewport, MouseButton } from "./browser";
+import { MouseButton } from "./browser";
 
 @Component({
 	selector: 'map-geo-ref-layer',
@@ -11,9 +11,68 @@ import { getCursorPositionInViewport, MouseButton } from "./browser";
 })
 export class GeoRefLayerComponent {
 
+	constructor(private readonly domSanitizer: DomSanitizer) {
+	}
+
 	@ViewChild("image")	image: ElementRef;
 
-	constructor(private readonly domSanitizer: DomSanitizer) {
+	private _opacity = 1;
+
+	public get opacity(): number {
+		return this._opacity;
+	}
+
+	public set opacity(v: number) {
+		this._opacity = MathUtils.clip(v, 0, 1);
+	}
+
+	private _scale = 1;
+
+	public get scale(): number {
+		return this._scale;
+	}
+
+	public set scale(v: number) {
+		this._scale = MathUtils.clip(v, 0.1, 10);
+	}
+
+	public position = new Point(0, 0);
+
+	public get x(): number {
+		return this.position.x;
+	}
+
+	public set x(v: number) {
+		this.position = new Point(v, this.position.y);
+	}
+
+	public get y(): number {
+		return this.position.y;
+	}
+
+	public set y(v: number) {
+		this.position = new Point(this.position.x, v);
+	}
+
+	private _rotation = 0;
+
+	public get rotation(): number {
+		return this._rotation;
+	}
+
+	public set rotation(v: number) {
+		this._rotation = v % 360;
+	}
+
+	public get imageTransform(): string {
+		return `scale(${this.scale}) translate(${this.position.x}px, ${this.position.y}px) rotate(${this.rotation}deg)`;
+	}
+
+	public reset() {
+		this.opacity = 1;
+		this.scale = 1;
+		this.rotation = 0;
+		this.position = new Point(0, 0);
 	}
 
 	@HostBinding("class.image-selected")
@@ -39,20 +98,38 @@ export class GeoRefLayerComponent {
 		return this._imageUrl;
 	}
 
-	private _opacity = 1;
-
-	public get opacity(): number {
-		return this._opacity;
-	}
-
-	public set opacity(v: number) {
-		this._opacity = MathUtils.clip(v, 0, 1);
-	}
+	public helpVisible: boolean;
 
 	public passThrough: boolean;
 
 	get pointerEvents() {
 		return this.image && !this.passThrough ? "all" : "none";
+	}
+
+	private add(files: FileList) {
+		if (!files?.length) {
+			return;
+		}
+		this.imageFile = files.item(0);
+	}
+
+	private addFilesFromDataTransfer(dt: DataTransfer) {
+		if (dt.items) {
+			// Use DataTransferItemList interface to access the file(s)
+			for (let i = 0; i < dt.items.length; i++) {
+				if (dt.items[i].kind === "file") {
+					const f = dt.items[i].getAsFile();
+					this.imageFile = f;
+				}
+			}
+		} else {
+			// Use DataTransfer interface to access the file(s)
+			this.add(dt.files);
+		}
+	}
+
+	public browse() {
+		this.fileInput.nativeElement.click();
 	}
 
 	handleInputChange(event: Event) {
@@ -96,40 +173,17 @@ export class GeoRefLayerComponent {
 		this.addFilesFromDataTransfer(event.dataTransfer);
 	}
 
-	private addFilesFromDataTransfer(dt: DataTransfer) {
-		if (dt.items) {
-			// Use DataTransferItemList interface to access the file(s)
-			for (let i = 0; i < dt.items.length; i++) {
-				if (dt.items[i].kind === "file") {
-					const f = dt.items[i].getAsFile();
-					this.imageFile = f;
-				}
-			}
-		} else {
-			// Use DataTransfer interface to access the file(s)
-			this.add(dt.files);
-		}
+	handlePan(event: HammerInput) {
+		const delta = new Point(event.deltaX, event.deltaY);
+		this.position = PointUtils.add(this.position, delta);
 	}
 
-	private add(files: FileList) {
-		if (!files?.length) {
-			return;
-		}
-		this.imageFile = files.item(0);
+	handlePinch(event: HammerInput) {
+		this.scale += event.distance * 0.01;
 	}
 
-	public browse() {
-		this.fileInput.nativeElement.click();
-	}
-
-	private _scale = 1;
-
-	public get scale(): number {
-		return this._scale;
-	}
-
-	public set scale(v: number) {
-		this._scale = MathUtils.clip(v, 0.1, 10);
+	handleRotate(event: HammerInput) {
+		this.rotation += event.angle;
 	}
 
 	handleMouseWheel(event: WheelEvent) {
@@ -139,70 +193,41 @@ export class GeoRefLayerComponent {
 		if (!event.deltaY) {
 			return;
 		}
+
+		event.preventDefault();
+		event.stopImmediatePropagation();
+
 		const delta = event.deltaY * -0.001;
-		if (event.shiftKey) {
+		if (event.ctrlKey) {
 			this.opacity += MathUtils.clip(delta, 0.1, 1);
 			return;
 		}
-		if (event.ctrlKey || event.buttons === MouseButton.RIGHT) {
+		if (event.shiftKey || event.buttons === MouseButton.RIGHT) {
 			this.rotation += delta * 10;
-			event.preventDefault();
-			event.stopImmediatePropagation();
 			return;
 		}
 		this.scale = this.scale + delta;
 	}
 
-	public position = new Point(0, 0);
+	// private startDragPoint: Point;
 
-	public get x(): number {
-		return this.position.x;
-	}
+	// @HostListener("window:mousedown", ["$event"])
+	// handleDragStart(event: DragEvent) {
+	// 	if (!this.image || event.target !== this.image.nativeElement) {
+	// 		return;
+	// 	}
+	// 	this.startDragPoint = new Point(event.screenX, event.screenY);
+	// }
 
-	public set x(v: number) {
-		this.position = new Point(v, this.position.y);
-	}
+	// @HostListener("window:mouseup", ["$event"])
+	// handleDragEnd(event: DragEvent) {
+	// 	if (!this.startDragPoint) {
+	// 		return;
+	// 	}
+	// 	const endDragPoint = new Point(event.screenX, event.screenY);
+	// 	const delta = PointUtils.delta(this.startDragPoint, endDragPoint);
+	// 	this.position = PointUtils.add(this.position, delta);
+	// 	delete this.startDragPoint;
+	// }
 
-	public get y(): number {
-		return this.position.y;
-	}
-
-	public set y(v: number) {
-		this.position = new Point(this.position.x, v);
-	}
-
-	private startDragPoint: Point;
-
-	@HostListener("window:mousedown", ["$event"])
-	handleDragStart(event: DragEvent) {
-		if (!this.image || event.target !== this.image.nativeElement) {
-			return;
-		}
-		this.startDragPoint = new Point(event.screenX, event.screenY);
-	}
-
-	@HostListener("window:mouseup", ["$event"])
-	handleDragEnd(event: DragEvent) {
-		if (!this.startDragPoint) {
-			return;
-		}
-		const endDragPoint = new Point(event.screenX, event.screenY);
-		const delta = PointUtils.delta(this.startDragPoint, endDragPoint);
-		this.position = PointUtils.add(this.position, delta);
-		delete this.startDragPoint;
-	}
-
-	private _rotation = 0;
-
-	public get rotation(): number {
-		return this._rotation;
-	}
-
-	public set rotation(v: number) {
-		this._rotation = v % 360;
-	}
-
-	public get imageTransform(): string {
-		return `scale(${this.scale}) translate(${this.position.x}px, ${this.position.y}px) rotate(${this.rotation}deg)`;
-	}
 }

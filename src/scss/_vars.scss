@@ -1,3 +1,6 @@
+@import "mat-theme-green";
+@import '~@angular/material/theming';
+
 $theme-colors: mat-get-color-config($theme);
 
 $thin: 0.1em;

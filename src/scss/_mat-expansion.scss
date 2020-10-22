@@ -11,6 +11,10 @@ div.mat-expansion-panel-body {
     padding: 0 2em 1em 4em;
 }
 
+.mat-expansion-panel.invert .mat-expansion-panel-header {
+	transform: rotate(180deg);
+}
+
 .toolbox.vertical {
 	background-color: rgba(mat-color(map-get($theme-colors, accent)), 0.5);
 	display: flex;
@@ -37,6 +41,12 @@ div.mat-expansion-panel-body {
 	div.mat-expansion-panel-body {
 		padding: 0;
 		text-align: center;
+
+		> * {
+			display: block;
+			margin: auto;
+			text-align: center;
+		}
 	}
 
 	mat-slider {

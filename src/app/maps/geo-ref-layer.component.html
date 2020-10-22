@@ -7,9 +7,12 @@
 		[style.opacity]="opacity"
 		[style.pointer-events]="pointerEvents"
 		(mousewheel)="handleMouseWheel($event)"
-		(wheel)="handleMouseWheel($event)"/>
+		(wheel)="handleMouseWheel($event)"
+		(pan)="handlePan($event)"
+		(rotate)="handleRotate($event)"
+		(pinch)="handlePinch($event)"/>
 
-<mat-expansion-panel class="toolbox vertical" cdkDrag>
+<mat-expansion-panel class="toolbox vertical invert" cdkDrag>
 	<mat-expansion-panel-header cdkDragHandle></mat-expansion-panel-header>
 
 	<button class="image" (click)="browse()" title="Choose image to geo-reference"></button>
@@ -24,6 +27,37 @@
 		<label title="Rotate image by degrees"><span>&#x27f3;</span> <input type="number" min="-180" max="180" step="0.1" [(ngModel)]="rotation"/></label>
 
 		<label title="Opacity"><span class="opacity"></span> <input type="number" min="0" max="1" step="0.01" [(ngModel)]="opacity"/></label>
+
+		<mat-checkbox [(ngModel)]="passThrough">Pass through</mat-checkbox>
+
+		<a title="Reset" (click)="reset()" class="reset" role="button"></a>
 	</ng-container>
 
+	<a title="Help" (click)="helpVisible = !helpVisible" class="help" role="button"></a>
+
 </mat-expansion-panel>
+
+<mat-card [hidden]="!helpVisible" class="help" cdkDrag (dblclick)="helpVisible = !helpVisible">
+	<mat-card-title>
+		<span>Geo reference image tool</span>
+		<button (click)="helpVisible = !helpVisible" class="close"></button>
+	</mat-card-title>
+	<mat-card-content>
+		<dl>
+			<dt>drag mouse</dt>
+			<dd>move image over map</dd>
+
+			<dt>Ctrl + mouse wheel</dt>
+			<dd>adjust image opacity</dd>
+
+			<dt>Shift + mouse wheel or Shift + drag mouse</dt>
+			<dd>rotate image</dd>
+
+			<dt>mouse wheel</dt>
+			<dd>scale image</dd>
+
+			<dt>double click on this help</dt>
+			<dd>close this help</dd>
+		</dl>
+	</mat-card-content>
+</mat-card>

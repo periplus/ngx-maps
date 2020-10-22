@@ -3,18 +3,20 @@ import { DragDropModule } from "@angular/cdk/drag-drop";
 import { OverlayModule } from "@angular/cdk/overlay";
 import { CommonModule } from "@angular/common";
 import { HttpClientModule } from "@angular/common/http";
-import { NgModule } from "@angular/core";
+import { Injectable, NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { MatCardModule } from "@angular/material/card";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatSliderModule } from "@angular/material/slider";
-import { BrowserModule } from "@angular/platform-browser";
+import { BrowserModule, HammerModule, HammerGestureConfig, HAMMER_GESTURE_CONFIG } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
 import { ContextMenuModule } from "ngx-contextmenu";
 import { MathProjection, Projection } from "ts-geo";
+import * as Hammer from 'hammerjs';
 
 import tileSources from "../../assets/tile-sources.json";
 import { ControlsComponent } from "./controls.component";
@@ -33,6 +35,13 @@ import { TileUrlPipe } from "./tile-url.pipe";
 import { Tracker } from "./Tracker";
 import { WikipediaPOISource } from "./wikipedia-poi-source";
 
+@Injectable()
+export class MyHammerConfig extends HammerGestureConfig {
+	overrides = <any> {
+		swipe: { direction: Hammer.DIRECTION_ALL },
+	};
+}
+
 @NgModule({
 	declarations: [
 		MapModule.COMPONENTS, MapModule.PIPES
@@ -49,7 +58,9 @@ import { WikipediaPOISource } from "./wikipedia-poi-source";
 		ClipboardModule,
 		DragDropModule,
 		FormsModule,
+		HammerModule,
 		HttpClientModule,
+		MatCardModule,
 		MatCheckboxModule,
 		MatExpansionModule,
 		MatSidenavModule,
@@ -67,7 +78,8 @@ import { WikipediaPOISource } from "./wikipedia-poi-source";
 		{ provide: POI_SOURCES, useClass: WikipediaPOISource, multi: true },
 		{ provide: POI_SOURCES, useClass: GeoNamesPOISource, multi: true },
 		{ provide: MapConfigSerializer, useClass: LocalStorageMapConfigSerializer },
-		{ provide: Tracker, useClass: GpsTracker }
+		{ provide: Tracker, useClass: GpsTracker },
+		{ provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig }
 	],
 	bootstrap: []
 })

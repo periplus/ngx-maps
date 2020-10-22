@@ -1,4 +1,5 @@
 @import "fontawesome";
+@import "vars";
 
 html, body {
 	color: var(--text-primary-color);
@@ -25,44 +26,52 @@ h2 {
 	font-size: 1.1em;
 }
 
-button {
+button, [role="button"] {
 	background: transparent;
 	border: none;
+	color: mat-color(map-get($theme-colors, accent), darker);
+	cursor: pointer;
 	outline: none;
 
 	&.expand {
-		&:after {
+		&:before {
 			@include fa-icon($fa-var-chevron-down);
 		}
 	}
 
 	&.collapse {
-		&:after {
+		&:before {
 			@include fa-icon($fa-var-chevron-up);
 		}
 	}
 
 	&.image {
-		&:after {
+		&:before {
 			@include fa-icon($fa-var-image);
 		}
 	}
 
-	&.delete, &.remove, &.clear {
-		&:after {
+	&.delete, &.remove, &.clear, &.close, &.reset {
+		&:before {
 			@include fa-icon($fa-var-times);
+		}
+	}
+
+	&.help {
+		&:before {
+			@include fa-icon($fa-var-question);
 		}
 	}
 }
 
 .opacity {
-	&:after {
+	&:before {
 		@include fa-icon($fa-var-adjust);
 	}
 }
 
 .scale {
-	&:after {
+	&:before {
 		@include fa-icon($fa-var-search);
 	}
 }
@@ -92,6 +101,11 @@ ol, ul {
 	list-style-type: none;
 	margin: 0;
 	padding: 0;
+}
+
+dt {
+	font-style: italic;
+	margin-top: .5em;
 }
 
 [hidden] {

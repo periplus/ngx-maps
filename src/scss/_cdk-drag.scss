@@ -1,9 +1,11 @@
 .cdk-drag {
 	border: solid 1px;
 	border-radius: .5em;
+	cursor: move;
 	list-style-type: none;
 	margin: 2px 0;
 	padding: 0 .5em;
+	pointer-events: all;
 }
 
 .cdk-drag-placeholder {
