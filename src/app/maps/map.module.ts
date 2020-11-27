@@ -72,7 +72,7 @@ export class HammerConfig extends HammerGestureConfig {
 		RouterModule.forRoot([
 			{ path: "", component: MapComponent },
 			{ path: ":zoom/:latitude/:longitude", component: MapComponent }
-		])
+		], { relativeLinkResolution: 'legacy' })
 	],
 	providers: [
 		{ provide: Projection, useValue: new MathProjection() },
