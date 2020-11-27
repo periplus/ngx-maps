@@ -1,29 +1,38 @@
-import { Component, ElementRef, HostBinding, HostListener, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, ViewChild } from "@angular/core";
 import { DomSanitizer, SafeUrl } from "@angular/platform-browser";
-import { MathUtils, Point, PointUtils } from "ts-geo";
+import { Point, PointUtils, Projection } from "ts-geo";
+import { GeoImage } from "@geotiles/model";
+import { clamp } from "lodash-es";
 
 import { MouseButton } from "./browser";
+import { BaseLayerComponent } from './base-layer.component';
 
 @Component({
 	selector: 'map-geo-ref-layer',
 	templateUrl: './geo-ref-layer.component.html',
 	styleUrls: ['./geo-ref-layer.component.scss']
 })
-export class GeoRefLayerComponent {
+export class GeoRefLayerComponent extends BaseLayerComponent {
 
-	constructor(private readonly domSanitizer: DomSanitizer) {
+	constructor(cdr: ChangeDetectorRef, host: ElementRef, projection: Projection,
+		private readonly domSanitizer: DomSanitizer) {
+		super(cdr, host, projection);
 	}
 
-	@ViewChild("image")	image: ElementRef;
+	private _image: ElementRef;
 
-	private _opacity = 1;
-
-	public get opacity(): number {
-		return this._opacity;
+	get image(): ElementRef {
+		return this._image;
 	}
 
-	public set opacity(v: number) {
-		this._opacity = MathUtils.clip(v, 0, 1);
+	@ViewChild("image", {static: true}) set image(i: ElementRef) {
+		this._image = i;
+		if (!i) {
+			return;
+		}
+		const hammer = new Hammer(this._image.nativeElement);
+		hammer.get('pinch').set({ enable: true });
+		hammer.get('rotate').set({ enable: true });
 	}
 
 	private _scale = 1;
@@ -33,7 +42,7 @@ export class GeoRefLayerComponent {
 	}
 
 	public set scale(v: number) {
-		this._scale = MathUtils.clip(v, 0.1, 10);
+		this._scale = clamp(v, 0.1, 10);
 	}
 
 	public position = new Point(0, 0);
@@ -103,7 +112,7 @@ export class GeoRefLayerComponent {
 	public passThrough: boolean;
 
 	get pointerEvents() {
-		return this.image && !this.passThrough ? "all" : "none";
+		return this.imageUrl && !this.passThrough ? "all" : "none";
 	}
 
 	private add(files: FileList) {
@@ -173,9 +182,13 @@ export class GeoRefLayerComponent {
 		this.addFilesFromDataTransfer(event.dataTransfer);
 	}
 
+	private previousDelta = new Point(0, 0);
+
 	handlePan(event: HammerInput) {
-		const delta = new Point(event.deltaX, event.deltaY);
-		this.position = PointUtils.add(this.position, delta);
+		const eventDelta = new Point(event.deltaX, event.deltaY);
+		const delta = PointUtils.minus(eventDelta, this.previousDelta);
+		this.position = PointUtils.add(this.position, eventDelta);
+		this.previousDelta = eventDelta;
 	}
 
 	handlePinch(event: HammerInput) {
@@ -199,7 +212,7 @@ export class GeoRefLayerComponent {
 
 		const delta = event.deltaY * -0.001;
 		if (event.ctrlKey) {
-			this.opacity += MathUtils.clip(delta, 0.1, 1);
+			this.opacity += clamp(delta, 0.1, 1);
 			return;
 		}
 		if (event.shiftKey || event.buttons === MouseButton.RIGHT) {
@@ -230,4 +243,18 @@ export class GeoRefLayerComponent {
 	// 	delete this.startDragPoint;
 	// }
 
+	toGeoImage(): GeoImage {
+		const geoImage = new GeoImage();
+		//geoImage.center = this.center;
+		geoImage.zoom = this.zoom;
+		geoImage.rotation = this.rotation;
+		geoImage.scale = this.scale;
+		//geoImage.content =
+		return geoImage;
+	}
+
+	submit() {
+		const geoImage = this.toGeoImage();
+
+	}
 }

@@ -62,5 +62,5 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  * APPLICATION IMPORTS
  */
 import 'hammerjs';
-import TouchEmulator from "hammer-touchemulator";
+import * as TouchEmulator from "hammer-touchemulator";
 TouchEmulator();

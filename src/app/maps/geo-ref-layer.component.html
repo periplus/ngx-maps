@@ -1,14 +1,14 @@
 <input type="file" hidden #fileInput (click)="fileInput.value = null"
 		(input)="handleInputChange($event)" (change)="handleInputChange($event)"/>
 
-<img #image *ngIf="imageUrl" [src]="imageUrl" alt="Process image using the toolbox"
+<img #image [hidden]="!imageUrl" [src]="imageUrl" alt="Process image using the toolbox"
 		draggable="false" (dragstart)="false;"
 		[style.transform]="imageTransform"
 		[style.opacity]="opacity"
 		[style.pointer-events]="pointerEvents"
 		(mousewheel)="handleMouseWheel($event)"
 		(wheel)="handleMouseWheel($event)"
-		(pan)="handlePan($event)"
+		(panend)="handlePan($event)"
 		(rotate)="handleRotate($event)"
 		(pinch)="handlePinch($event)"/>
 

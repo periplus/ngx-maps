@@ -35,12 +35,14 @@ import { TileUrlPipe } from "./tile-url.pipe";
 import { Tracker } from "./Tracker";
 import { WikipediaPOISource } from "./wikipedia-poi-source";
 
+
 @Injectable()
-export class MyHammerConfig extends HammerGestureConfig {
+export class HammerConfig extends HammerGestureConfig {
 	overrides = <any> {
-		swipe: { direction: Hammer.DIRECTION_ALL },
+		'pan': { threshold: 1 }
 	};
 }
+
 
 @NgModule({
 	declarations: [
@@ -79,7 +81,7 @@ export class MyHammerConfig extends HammerGestureConfig {
 		{ provide: POI_SOURCES, useClass: GeoNamesPOISource, multi: true },
 		{ provide: MapConfigSerializer, useClass: LocalStorageMapConfigSerializer },
 		{ provide: Tracker, useClass: GpsTracker },
-		{ provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig }
+		{ provide: HAMMER_GESTURE_CONFIG, useClass: HammerConfig }
 	],
 	bootstrap: []
 })
